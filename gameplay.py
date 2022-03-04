@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #Implémentation des instrunctions de jeu
 
 import othello_board as ob
@@ -23,7 +24,6 @@ def next_pos(board : 'list[list[int]]', player : 'str'):
             if board[k][p] == player_int :
                 list_play = list_possible_play(board, k, p, player_int)
                 if list_play != []:
-                    ob.display_othello(board)
                     for i in range(len(list_play)):
                         next_board[list_play[i][0]][list_play[i][1]] = 3
 
