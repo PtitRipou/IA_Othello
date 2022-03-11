@@ -179,7 +179,7 @@ def winner(board):
                 continue
     
     if nb1 == nb2:
-        return "Égalité !"
+        return "draw"
     
     elif nb1 > nb2:
         return nb1

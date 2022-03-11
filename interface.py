@@ -55,5 +55,14 @@ def play(p1 : 'str', p2 : 'str'):
             coup = input("Player 2 choose a stroke : ")
             board = gp.next_play(board, liste_pos, int(coup), turn)
             turn = 1
+    
+    ob.display_othello(board)
+    var = gp.end(board, turn)
+
+    if type(var) == int:
+        print("Player ", var, " win the game !")
+    
+    else:
+        print("The match ended in a draw !")
 
 menu()
