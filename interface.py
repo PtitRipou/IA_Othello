@@ -48,7 +48,6 @@ def play(p1 : 'str', p2 : 'str'):
             coup = input("Player 1 choose a stroke : ")
             board = gp.next_play(board, liste_pos, int(coup), turn)
             turn = 2
-            ob.display_othello(board)
         
         else :
             board = gp.next_pos(board, turn)
@@ -56,6 +55,5 @@ def play(p1 : 'str', p2 : 'str'):
             coup = input("Player 2 choose a stroke : ")
             board = gp.next_play(board, liste_pos, int(coup), turn)
             turn = 1
-            ob.display_othello(board)
 
 menu()
