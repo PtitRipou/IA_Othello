@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Affichage du plateau d'Othello
 
-#Retourne la liste des positions initiales du plateau de jeu
+# Retourne la liste des positions initiales du plateau de jeu
 def init_othello():
     liste_pos=[]
 
@@ -13,7 +13,7 @@ def init_othello():
     return liste_pos
 
 # Permets d'afficher le plateau de jeu
-def display_othello(board: 'list[list[int]]'):
+def display_othello(board: 'list[list[int]]', opt : 'int'):
     all_string = "   a b c d e f g h\n"
     liste_pos = []
     k = 1
@@ -42,5 +42,7 @@ def display_othello(board: 'list[list[int]]'):
         k += 1
         all_string += "\n"
     
-    print(all_string)
+    if opt == 0:
+        print(all_string)
+
     return liste_pos

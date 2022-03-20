@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-#Implémentation des instrunctions de jeu
+# Implémentation des instrunctions de jeu
 
 import othello_board as ob
 import copy
 
-#Permet de déterminer les positions suivantes possible pour une configuration de plateau
-def next_pos(board : 'list[list[int]]', playe : 'int'):
+# Permet de déterminer les positions suivantes possible pour une configuration de plateau
+def next_pos(board : 'list[list[int]]', player : 'int'):
     next_board = copy.deepcopy(board)
-    player = int(playe)
 
     for k in range(8):
 
@@ -23,7 +22,7 @@ def next_pos(board : 'list[list[int]]', playe : 'int'):
 
     return next_board
 
-#Détermine si le pion en p,k permet de jouer un coup (analyse des pions voisins)
+# Détermine si le pion en p,k permet de jouer un coup (analyse des pions voisins)
 def list_possible_play(board : 'list[list[int]]', k : 'int', p : 'int', player : 'int'):
     pos_k = [-1,-1,-1,0,0,1,1,1]
     pos_p = [-1,0,1,-1,1,-1,0,1]
@@ -55,7 +54,7 @@ def list_possible_play(board : 'list[list[int]]', k : 'int', p : 'int', player :
 
     return list_play
 
-#Permet de savoir, lorsqu'un pion est voisin d'un pion adverse, si un coup est jouable
+# Permet de savoir, lorsqu'un pion est voisin d'un pion adverse, si un coup est jouable
 def how_far(board : 'list[list[int]]', ind_k : 'int', ind_p : 'int', k : 'int', p : 'int', player : 'int'):
     var1 = True
     var2 = 0
@@ -76,10 +75,11 @@ def how_far(board : 'list[list[int]]', ind_k : 'int', ind_p : 'int', k : 'int', 
 
     return False
 
-#Permet de jouer un coup
+# Permet de jouer un coup
 def next_play(board : 'list[list[int]]', liste_pos : 'list[tuple]', pos : 'int', player : 'int'):
     pos_k = [-1,-1,-1,0,0,1,1,1]
     pos_p = [-1,0,1,-1,1,-1,0,1]
+
     ind1 = liste_pos[pos-1][0]
     ind2 = liste_pos[pos-1][1]
 
@@ -120,7 +120,7 @@ def next_play(board : 'list[list[int]]', liste_pos : 'list[tuple]', pos : 'int',
     board[ind1][ind2] = player
     return board
 
-#Permet de netoyer le plateau de jeu des anciens coups possibles
+# Permet de netoyer le plateau de jeu des anciens coups possibles
 def clean_board(board : 'list[list[int]]', liste_pos : 'list[tuple]'):
 
     for p in liste_pos:
@@ -130,7 +130,7 @@ def clean_board(board : 'list[list[int]]', liste_pos : 'list[tuple]'):
     
     return board
 
-#Permet de retrouver l'origine du coup joué
+# Permet de retrouver l'origine du coup joué
 def how_far2(board : 'list[list[int]]', ind_k : 'int', ind_p : 'int', k : 'int', p : 'int', player : 'int'):
     var1 = True
     var2 = 0
@@ -151,17 +151,25 @@ def how_far2(board : 'list[list[int]]', ind_k : 'int', ind_p : 'int', k : 'int',
 
     return False
 
-#Permet de déterminer si une partie est terminée
+# Permet de déterminer si une partie est terminée
 def end(board : 'list[list[int]]', player : 'int'):
+    list_player = [1, 2]
+    k = list_player.index(player)
     next_board = next_pos(board, player)
     
     if next_board == board:
-        return winner(board)
-    
+        next_board2 = next_pos(next_board, list_player[k - 1])
+
+        if next_board2 == board:
+            return winner(board)
+        
+        else:
+            return False
+        
     else:
         return False
 
-#Permet de déterminer le gagnant d'un partie
+# Permet de déterminer le gagnant d'un partie
 def winner(board):
     nb1, nb2 = 0, 0
 
@@ -179,10 +187,10 @@ def winner(board):
                 continue
     
     if nb1 == nb2:
-        return "draw"
+        return 0
     
     elif nb1 > nb2:
-        return nb1
+        return 1
     
     else:
-        return nb2
+        return 2
