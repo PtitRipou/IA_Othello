@@ -46,3 +46,30 @@ def display_othello(board: 'list[list[int]]', opt : 'int'):
         print(all_string)
 
     return liste_pos
+
+#Permet d'associer aux cases du plateau de jeu des valeurs
+def val_board():
+    board = [[1 for k in range(8)] for p in range (8)]
+    val_list1 = [40, 3, 15, 10]
+    val_list2 = [3, 0, 9, 12]
+    val_list3 = [15, 9, 11, 15]
+    val_list4 = [10, 12, 15, 18]
+    val_list = [val_list1, val_list2, val_list3, val_list4]
+
+    for a in range(8):
+        for b in range(8):
+
+            if a <= 3:
+                if b <= 3:
+                    board[a][b] = val_list[a][b]
+                else:
+                    board[a][b] = val_list[a][-(b%4)-1]
+            
+            else:
+                if b <= 3:
+                    board[a][b] = val_list[-(a%4)-1][b]
+                
+                else:
+                    board[a][b] = val_list[-(a%4)-1][-(b%4)-1]
+
+    return board

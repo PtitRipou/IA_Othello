@@ -110,3 +110,22 @@ def fonct_eval_absolu(board : 'list[list[int]]', player):
     
     else:
         return (nb2 - nb1, None)
+
+def fonct_eval_positional(board : 'list[list[int]]', player):
+    val_board = ob.val_board()
+    nb1, nb2 = 0, 0
+
+    for k in board:
+        for p in k:
+
+            if p == 1:
+                nb1 += val_board[board.index(k)][k.index(p)]
+            
+            elif p == 2:
+                nb2 += val_board[board.index(k)][k.index(p)]
+    
+    if player == 1:
+        return (nb1 - nb2, None)
+    
+    else:
+        return (nb2 - nb1, None)

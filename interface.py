@@ -25,10 +25,14 @@ def menu():
                 var2 = False
 
                 while var2 != True:
-                    meth_choice = input("\nChoose the AI's method :\n1. Absolute\n\nChoice : ")
+                    meth_choice = input("\nChoose the AI's method :\n1. Absolute\n2. Positional\n\nChoice : ")
 
                     if meth_choice == "1":
                         method = "absolute"
+                        var2 = True
+                    
+                    elif meth_choice == "2":
+                        method = "positional"
                         var2 = True
                     
                     else:
@@ -52,6 +56,11 @@ def play(p1 : 'tuple', p2 : 'tuple'):
 
     elif (p1[0] == "human") and (p2[0] == "ia"):
         result = human_ai(p2[1])
+        board = result[0]
+        turn = result[1]
+    
+    elif (p1[0] == "ia") and (p2[0] == "ia"):
+        result = ai_ai(p1[1], p2[1])
         board = result[0]
         turn = result[1]
 
@@ -107,7 +116,7 @@ def human_human():
 def human_ai(method : 'str'):
     board = ob.init_othello()
     turn = 1
-    list_method = [("absolute",mm.fonct_eval_absolu)]
+    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional)]
 
     funct_eval = which_method(list_method, method)
 
@@ -143,6 +152,49 @@ def human_ai(method : 'str'):
             turn = 1
     
     return (board, turn)
+
+def ai_ai(method1 : 'str', method2 : 'str'):
+    board = ob.init_othello()
+    turn = 1
+    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional)]
+
+    funct_eval1 = which_method(list_method, method1)
+    funct_eval2 = which_method(list_method, method2)
+
+    while gp.end(board, turn) == False:
+        
+        if turn == 1:
+            next_board = gp.next_pos(board, turn)
+            liste_pos = ob.display_othello(next_board, 1)
+
+            if len(liste_pos) == 0:
+                print("Player 1 can't play !\n")
+            
+            else:
+                result = mm.max_value(board, turn, 0, funct_eval1)
+                board = gp.next_pos(board, turn)
+                liste_pos = ob.display_othello(board, 1)
+                board = gp.next_play(board, liste_pos, result[1], turn)
+                ob.display_othello(board, 0)
+            turn = 2
+        
+        else :
+            next_board = gp.next_pos(board, turn)
+            liste_pos = ob.display_othello(next_board, 1)
+
+            if len(liste_pos) == 0:
+                print("Player 2 can't play !\n")
+            
+            else:
+                result = mm.max_value(board, turn, 0, funct_eval2)
+                board = gp.next_pos(board, turn)
+                liste_pos = ob.display_othello(board, 1)
+                board = gp.next_play(board, liste_pos, result[1], turn)
+                ob.display_othello(board, 0)
+            turn = 1
+
+    return (board, turn)
+        
 
 def which_method(list_method : 'list[tuple]', method : 'str'):
 
