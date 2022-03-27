@@ -91,10 +91,20 @@ def human_human():
                 print("Player 1 can't play !\n")
 
             else:
-                coup = input("Player 1 is choosing a stroke : ")
-                print('\n')
-                board = gp.next_play(board, liste_pos, int(coup), turn)
+                val_coup = False
 
+                while val_coup == False:
+                    coup = input("Player 1 is choosing a stroke : ")
+                    print('\n')
+
+                    if (coup == '') or ((int(coup) - 1) >= len(liste_pos)) or (int(coup) <= 0):
+                        print("Error ! Choose a correct stroke !\n")
+                    
+                    else:
+                        val_coup = True
+                
+                board = gp.next_play(board, liste_pos, int(coup), turn)
+            
             turn = 2
         
         else :
@@ -105,8 +115,18 @@ def human_human():
                 print("Player 2 can't play !\n")
 
             else:
-                coup = input("Player 2 is choosing a stroke : ")
-                print('\n')
+                val_coup = False
+
+                while val_coup == False:
+                    coup = input("Player 2 is choosing a stroke : ")
+                    print('\n')
+
+                    if (coup == '') or ((int(coup) - 1) >= len(liste_pos)) or (int(coup) <= 0):
+                        print("Error ! Choose a correct stroke !\n")
+                    
+                    else:
+                        val_coup = True
+                
                 board = gp.next_play(board, liste_pos, int(coup), turn)
             
             turn = 1
@@ -130,8 +150,18 @@ def human_ai(method : 'str'):
                 print("Player 1 can't play !\n")
             
             else:
-                coup = input("Player 1 is choosing a stroke : ")
-                print('\n')
+                val_coup = False
+
+                while val_coup == False:
+                    coup = input("Player 1 is choosing a stroke : ")
+                    print('\n')
+
+                    if (coup == '') or ((int(coup) - 1) >= len(liste_pos)) or (int(coup) <= 0):
+                        print("Error ! Choose a correct stroke !\n")
+                    
+                    else:
+                        val_coup = True
+                
                 board = gp.next_play(board, liste_pos, int(coup), turn)
                 ob.display_othello(board, 0)
             
@@ -194,7 +224,6 @@ def ai_ai(method1 : 'str', method2 : 'str'):
             turn = 1
 
     return (board, turn)
-        
 
 def which_method(list_method : 'list[tuple]', method : 'str'):
 
