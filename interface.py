@@ -25,7 +25,7 @@ def menu():
                 var2 = False
 
                 while var2 != True:
-                    meth_choice = input("\nChoose the AI's method :\n1. Absolute\n2. Positional\n\nChoice : ")
+                    meth_choice = input("\nChoose the AI's method :\n1. Absolute\n2. Positional\n3. Mobility\n4. Mixed\n\nChoice : ")
 
                     if meth_choice == "1":
                         method = "absolute"
@@ -33,6 +33,14 @@ def menu():
                     
                     elif meth_choice == "2":
                         method = "positional"
+                        var2 = True
+                    
+                    elif meth_choice == "3":
+                        method = "mobility"
+                        var2 = True
+                    
+                    elif meth_choice == "4":
+                        method = "mixed"
                         var2 = True
                     
                     else:
@@ -136,7 +144,7 @@ def human_human():
 def human_ai(method : 'str'):
     board = ob.init_othello()
     turn = 1
-    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional)]
+    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional), ("mobility", mm.fonct_eval_mobility), ("mixed", mm.fonct_eval_mixed)]
 
     funct_eval = which_method(list_method, method)
 
@@ -186,7 +194,7 @@ def human_ai(method : 'str'):
 def ai_ai(method1 : 'str', method2 : 'str'):
     board = ob.init_othello()
     turn = 1
-    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional)]
+    list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional), ("mobility", mm.fonct_eval_mobility), ("mixed", mm.fonct_eval_mixed)]
 
     funct_eval1 = which_method(list_method, method1)
     funct_eval2 = which_method(list_method, method2)

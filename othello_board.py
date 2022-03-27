@@ -73,3 +73,29 @@ def val_board():
                     board[a][b] = val_list[-(a%4)-1][-(b%4)-1]
 
     return board
+
+def dist_corner():
+    board = [[1 for k in range(8)] for p in range (8)]
+    val_list1 = [40, 3, 20, 10]
+    val_list2 = [3, 0, 15, 5]
+    val_list3 = [20, 15, 20, 5]
+    val_list4 = [10, 5, 5, 5]
+    val_list = [val_list1, val_list2, val_list3, val_list4]
+
+    for a in range(8):
+        for b in range(8):
+
+            if a <= 3:
+                if b <= 3:
+                    board[a][b] = val_list[a][b]
+                else:
+                    board[a][b] = val_list[a][-(b%4)-1]
+            
+            else:
+                if b <= 3:
+                    board[a][b] = val_list[-(a%4)-1][b]
+                
+                else:
+                    board[a][b] = val_list[-(a%4)-1][-(b%4)-1]
+
+    return board
