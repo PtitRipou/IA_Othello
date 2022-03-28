@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Implémentation de l'algorithme min-max et des fonctions d'évaluations
 
-from tkinter import N
 import gameplay as gp
 import othello_board as ob
 from math import inf
@@ -185,3 +184,119 @@ def count_play(board : 'list[list[int]]'):
                 nb_full += 1
     
     return (nb_empty, nb_full)
+
+def max_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha, beta, eval_func : 'function'):
+    var = -inf
+    result = (var, -1)
+    next_board = gp.next_pos(board, player)
+    liste_pos = ob.display_othello(next_board, 1)
+
+    if (depth == max_depth * 2) or (type(gp.end(board, player)) == int):
+        return eval_func(board, player)
+    
+    elif len(liste_pos) == 0:
+
+        if player == 1:
+            player = 2
+
+        else:
+            player = 1
+
+        result_tmp = min_alpha_beta(next_board, player, (depth + 1), alpha, beta, eval_func)
+
+        if result_tmp[0] > result[0]:
+            var = result_tmp[0]
+            result = (var, -1)
+            
+        if result_tmp[0] >= beta:
+            var = result_tmp[0]
+            result = (var, -1)
+            return result
+            
+        if result_tmp[0] > alpha:
+            alpha = result_tmp[0]
+    
+    else:
+
+        for k in range(1, len(liste_pos) + 1):
+            next_board2 = gp.next_play(next_board, liste_pos, k, player)
+
+            if player == 1:
+                player = 2
+
+            else:
+                player = 1
+
+            result_tmp = min_alpha_beta(next_board2, player, (depth + 1), alpha, beta, eval_func)
+
+            if result_tmp[0] > result[0]:
+                var = result_tmp[0]
+                result = (var, k)
+            
+            if result_tmp[0] >= beta:
+                var = result_tmp[0]
+                result = (var, k)
+                return result
+            
+            if result_tmp[0] > alpha:
+                alpha = result_tmp[0]
+
+    return result
+
+def min_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha : '+inf', beta : '-inf', eval_func : 'function'):
+    var = inf
+    result = (var, -1)
+    next_board = gp.next_pos(board, player)
+    liste_pos = ob.display_othello(next_board, 1)
+
+    if (depth == max_depth * 2) or (type(gp.end(board, player)) == int):
+        return eval_func(board, player)
+    
+    elif len(liste_pos) == 0:
+
+        if player == 1:
+            player = 2
+
+        else:
+            player = 1
+
+        result_tmp = max_alpha_beta(next_board, player, (depth + 1), alpha, beta, eval_func)
+
+        if result_tmp[0] < result[0]:
+            var = result_tmp[0]
+            result = (var, -1)
+            
+        if result_tmp[0] <= alpha:
+            var = result_tmp[0]
+            result = (var, -1)
+            return result
+            
+        if result_tmp[0] < beta:
+            beta = result_tmp[0]
+    
+    else:
+
+        for k in range(1, len(liste_pos) + 1):
+            next_board2 = gp.next_play(next_board, liste_pos, k, player)
+
+            if player == 1:
+                player = 2
+
+            else:
+                player = 1
+
+            result_tmp = min_alpha_beta(next_board2, player, (depth + 1), alpha, beta, eval_func)
+
+            if result_tmp[0] < result[0]:
+                var = result_tmp[0]
+                result = (var, k)
+            
+            if result_tmp[0] <= alpha:
+                var = result_tmp[0]
+                result = (var, k)
+                return result
+            
+            if result_tmp[0] < beta:
+                beta = result_tmp[0]
+    
+    return result
