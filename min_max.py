@@ -8,16 +8,18 @@ from math import inf
 # Définition de la profondeur maximale
 max_depth = 2
 
-def max_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_func : 'function'):
+# 1ère fonction de l'algorithme min-max -> on manipule ici des tuples (var, k) avec var la valeur d'évaluation et k l'indice d'une position jouable
+def max_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_func : 'function') -> 'tuple':
     var = -inf
     result = (var, -1)
     next_board = gp.next_pos(board, player)
     liste_pos = ob.display_othello(next_board, 1)
 
-
+    # Conditions de sortie -> profondeur max atteinte ou fin du jeu
     if (depth == max_depth * 2) or (type(gp.end(board, player)) == int):
         return eval_func(board, player)
 
+    # Dans le cas où le joueur ne peux pas jouer -> prochaine étape de l'algorithme
     elif len(liste_pos) == 0:
 
         if player == 1:
@@ -51,7 +53,8 @@ def max_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_fun
 
     return result
 
-def min_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_func : 'function'):
+# 2ème fonction de l'algorithme min-max -> même particularités que max_value()
+def min_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_func : 'function') -> 'tuple':
     var = inf
     result = (var, -1)
     next_board = gp.next_pos(board, player)
@@ -93,7 +96,8 @@ def min_value(board : 'list[list[int]]', player : 'int', depth : 'int', eval_fun
 
     return result
 
-def fonct_eval_absolu(board : 'list[list[int]]', player : 'int'):
+# Fonction d'évaluation pour la méthode absolue
+def fonct_eval_absolu(board : 'list[list[int]]', player : 'int') -> 'tuple':
     nb1, nb2 = 0, 0
 
     for k in board:
@@ -111,7 +115,8 @@ def fonct_eval_absolu(board : 'list[list[int]]', player : 'int'):
     else:
         return (nb2 - nb1, None)
 
-def fonct_eval_positional(board : 'list[list[int]]', player : 'int'):
+# Fonction d'évaluation pour la méthode positionnelle
+def fonct_eval_positional(board : 'list[list[int]]', player : 'int') -> 'tuple':
     val_board = ob.val_board()
     nb1, nb2 = 0, 0
 
@@ -130,7 +135,8 @@ def fonct_eval_positional(board : 'list[list[int]]', player : 'int'):
     else:
         return (nb2 - nb1, None)
 
-def fonct_eval_mobility(board : 'list[list[int]]', player : 'int'):
+# Fonction d'évaluation pour la méthode mobile -> ici la valeur est une moyenne entre le nombre de coup à jouer et la valeur du poids de la case par rapport aux coins
+def fonct_eval_mobility(board : 'list[list[int]]', player : 'int') -> 'tuple':
     next_board = gp.next_pos(board, player)
     liste_pos = ob.display_othello(next_board, 1)
     nb_coup = len(liste_pos)
@@ -157,9 +163,14 @@ def fonct_eval_mobility(board : 'list[list[int]]', player : 'int'):
 
     return
 
-def fonct_eval_mixed(board : 'list[list[int]]', player : 'int'):
+# Fonction d'évaluation pour la méthode mixte
+def fonct_eval_mixed(board : 'list[list[int]]', player : 'int') -> 'tuple':
     res = count_play(board)
+
+    # Nombre de coups restants
     nb_to_play = res[0]
+
+    # Nombre de coups joués
     nb_play = res[1]
 
     if nb_play < 20:
@@ -171,7 +182,8 @@ def fonct_eval_mixed(board : 'list[list[int]]', player : 'int'):
     else:
         return fonct_eval_absolu(board, player)
 
-def count_play(board : 'list[list[int]]'):
+# Retourne le nombre de cases vides et pleines d'un plateau
+def count_play(board : 'list[list[int]]') -> 'tuple':
     nb_empty, nb_full = 0, -4
 
     for k in board:
@@ -185,15 +197,18 @@ def count_play(board : 'list[list[int]]'):
     
     return (nb_empty, nb_full)
 
-def max_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha, beta, eval_func : 'function'):
+# 1ère fonction de l'algoritme min-max version alpha-beta -> on manipule toujours les mêmes tuples que dans les fonctions max_value() et min_value()
+def max_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha, beta, eval_func : 'function') -> 'tuple':
     var = -inf
     result = (var, -1)
     next_board = gp.next_pos(board, player)
     liste_pos = ob.display_othello(next_board, 1)
 
+    # Test des conditions de sortie -> profondeur max ou fin du jeu
     if (depth == max_depth * 2) or (type(gp.end(board, player)) == int):
         return eval_func(board, player)
     
+    # Si le joueur courant ne peut pas jouer de coup -> étape suivante de l'algorithme
     elif len(liste_pos) == 0:
 
         if player == 1:
@@ -243,7 +258,8 @@ def max_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alp
 
     return result
 
-def min_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha : '+inf', beta : '-inf', eval_func : 'function'):
+# 2ème fonction de l'algorithme min-max version alpha-beta -> même particularités que max_alpha_beta()
+def min_alpha_beta(board : 'list[list[int]]', player : 'int', depth : 'int', alpha : '+inf', beta : '-inf', eval_func : 'function') -> 'tuple':
     var = inf
     result = (var, -1)
     next_board = gp.next_pos(board, player)

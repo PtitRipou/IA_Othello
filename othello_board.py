@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-# Affichage du plateau d'Othello
+# Fonction de manipulation du plateau d'Othello
 
-# Retourne la liste des positions initiales du plateau de jeu
-def init_othello():
-    liste_pos=[]
-
-    for k in range(8):
-        liste_pos.append([0,0,0,0,0,0,0,0])
+# Retourne la liste des positions initiales du plateau de jeu -> 0 = case vide | 1 = player 1 | 2 = player 2
+def init_othello() -> 'list[list[int]]': 
+    liste_pos=[[0 for k in range(8)] for p in range(8)]
 
     liste_pos[3][3], liste_pos[4][4] = 2, 2
     liste_pos[3][4], liste_pos[4][3] = 1, 1
     return liste_pos
 
-# Permets d'afficher le plateau de jeu
-def display_othello(board: 'list[list[int]]', opt : 'int'):
+# Retourne la liste des positions jouable lors de l'affichage du plateau de jeu (l'option 1 permet de retourner la liste sans afficher le plateau)
+def display_othello(board: 'list[list[int]]', opt : 'int') -> 'list[tuple]':
     all_string = "   a b c d e f g h\n"
     liste_pos = []
     k = 1
@@ -34,6 +31,7 @@ def display_othello(board: 'list[list[int]]', opt : 'int'):
             elif var == 2:
                 all_string += "●|"
             
+            # si var = 3 alors c'est un position jouable
             elif var == 3:
                 all_string += str(nbvar) + "|"
                 liste_pos.append((i, p))
@@ -47,8 +45,8 @@ def display_othello(board: 'list[list[int]]', opt : 'int'):
 
     return liste_pos
 
-#Permet d'associer aux cases du plateau de jeu des valeurs
-def val_board():
+# Retourne un plateau de jeu en associant à chaque case la valeur de son poids
+def val_board() -> 'list[list[int]]':
     board = [[1 for k in range(8)] for p in range (8)]
     val_list1 = [40, 3, 15, 10]
     val_list2 = [3, 0, 9, 12]
@@ -57,24 +55,26 @@ def val_board():
     val_list = [val_list1, val_list2, val_list3, val_list4]
 
     for a in range(8):
+
         for b in range(8):
 
             if a <= 3:
                 if b <= 3:
                     board[a][b] = val_list[a][b]
                 else:
-                    board[a][b] = val_list[a][-(b%4)-1]
+                    board[a][b] = val_list[a][-(b % 4) - 1]
             
             else:
                 if b <= 3:
-                    board[a][b] = val_list[-(a%4)-1][b]
+                    board[a][b] = val_list[-(a % 4) - 1][b]
                 
                 else:
-                    board[a][b] = val_list[-(a%4)-1][-(b%4)-1]
+                    board[a][b] = val_list[-(a % 4) - 1][-(b % 4) - 1]
 
     return board
 
-def dist_corner():
+# À la manière de val_board(), retourne un plateau avec pour chaque case, la valeur du poids en fonction de sa position par rapport au coin
+def dist_corner() -> 'list[list[int]]':
     board = [[1 for k in range(8)] for p in range (8)]
     val_list1 = [40, 3, 20, 10]
     val_list2 = [3, 0, 15, 5]
@@ -83,19 +83,20 @@ def dist_corner():
     val_list = [val_list1, val_list2, val_list3, val_list4]
 
     for a in range(8):
+
         for b in range(8):
 
             if a <= 3:
                 if b <= 3:
                     board[a][b] = val_list[a][b]
                 else:
-                    board[a][b] = val_list[a][-(b%4)-1]
+                    board[a][b] = val_list[a][-(b % 4) - 1]
             
             else:
                 if b <= 3:
-                    board[a][b] = val_list[-(a%4)-1][b]
+                    board[a][b] = val_list[-(a % 4) - 1][b]
                 
                 else:
-                    board[a][b] = val_list[-(a%4)-1][-(b%4)-1]
+                    board[a][b] = val_list[-(a % 4) - 1][-(b % 4) - 1]
 
     return board

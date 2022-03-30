@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
+# Implémentation de l'interface de jeu
 
 from math import inf
 import gameplay as gp
 import othello_board as ob
 import min_max as mm
 
-# Permet de configurer la partie
+# Permet à l'utilisateur de configurer une partie puis de la lancer | ATTENTION !!! -> ici faire jouer une ia comme joueur 1 contre un humain comme joueur 2 n'est pas encore possible (voir fonction play())
 def menu():
     player = []
 
+    # Choix des 2 joueurs
     for k in range(1,3):
         var1 = False
 
@@ -16,16 +18,19 @@ def menu():
             print("Choose player ", k, " :\n1. Human\n2. AI\n")
             choice = input("Choice : ")
 
+            # Si le joueur k est humain
             if choice == "1":
                 player.append(["human"])
                 print("Player ", k, " is human !\n")
                 var1 = True
             
+            # Si le joueur k est une ia -> choix de la méthode et de l'algorithme à utiliser
             elif choice == "2":
                 var1 = True
                 var2 = False
                 var3 = False
 
+                # Choix de la méthode
                 while var2 != True:
                     meth_choice = input("\nChoose the AI's method :\n1. Absolute\n2. Positional\n3. Mobility\n4. Mixed\n\nChoice : ")
 
@@ -48,6 +53,7 @@ def menu():
                     else:
                         print("Error ! This method doesn't exist !")
 
+                # Choix de l'algorithme
                 while var3 != True:
                     algo_choice = input("\nChoose the AI's algorithm :\n1. Min-Max\n2. Alpha-Beta\n\nChoice : ")
 
@@ -70,19 +76,22 @@ def menu():
     
     play(player[0], player[1])
 
-# Permet de lancer la partie
+# Permet de lancer une partie avec la bonne configuration
 def play(p1 : 'list[list]', p2 : 'list[list]'):
     
+    # Partie humain contre humain
     if (p1[0] == "human") and (p2[0] == "human"):
         result = human_human()
         board = result[0]
         turn = result[1]
 
+    # Partie humain contre ia | AMÉLIORATIONS -> ici joueur 1 forcément humain
     elif (p1[0] == "human") and (p2[0] == "ia"):
         result = human_ai(p2[1:3])
         board = result[0]
         turn = result[1]
     
+    # Partie ia contre ia
     elif (p1[0] == "ia") and (p2[0] == "ia"):
         result = ai_ai(p1[1:3], p2[1:3])
         board = result[0]
@@ -95,22 +104,27 @@ def play(p1 : 'list[list]', p2 : 'list[list]'):
     ob.display_othello(board, 0)
     var = gp.end(board, turn)
 
+    # Affichage du gagnant
     if (var == 1) or (var == 2):
         print("Player ", var, " win the game !")
     
     else:
         print("The match ended in a draw !")
 
-def human_human():
+# Permet de jouer une partie humain contre humain
+def human_human() -> 'tuple':
     board = ob.init_othello()
     turn = 1
 
+    # Tant que la partie n'est pas terminée
     while gp.end(board, turn) == False:
 
+        # Joueur 1
         if turn == 1:
             board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(board, 0)
-
+            
+            # Aucun coup n'est jouable
             if len(liste_pos) == 0:
                 print("Player 1 can't play !\n")
 
@@ -127,10 +141,12 @@ def human_human():
                     else:
                         val_coup = True
                 
+                # Jouer le coup choisit par le joueur 1
                 board = gp.next_play(board, liste_pos, int(coup), turn)
             
             turn = 2
         
+        # Joueur 2 -> même particularité que joueur 1
         else :
             board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(board, 0)
@@ -157,7 +173,8 @@ def human_human():
     
     return (board, turn)
 
-def human_ai(param : 'list[str]'):
+# Permet de jouer une partie humain contre ia
+def human_ai(param : 'list[str]') ->  'tuple':
     board = ob.init_othello()
     turn = 1
     list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional), ("mobility", mm.fonct_eval_mobility), ("mixed", mm.fonct_eval_mixed)]
@@ -166,6 +183,7 @@ def human_ai(param : 'list[str]'):
 
     while gp.end(board, turn) == False:
 
+        # Ici joueur 1 = humain -> mêmes particularités que human_human()
         if turn == 1:
             board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(board, 0)
@@ -191,15 +209,19 @@ def human_ai(param : 'list[str]'):
             
             turn = 2
         
+        # Ici joueur 2 = ia
         else :
+            print("\nJoueur 2 :\n")
             next_board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(next_board, 1)
 
+            # Si aucun coup n'est jouable
             if len(liste_pos) == 0:
                 print("Player 2 can't play !\n")
             
+            # Lance l'algoritme choisi
             else:
-
+                
                 if param[1] == "min-max":
                     result = mm.max_value(board, turn, 0, funct_eval)
                 
@@ -213,7 +235,8 @@ def human_ai(param : 'list[str]'):
     
     return (board, turn)
 
-def ai_ai(param1 : 'list[str]', param2 : 'list[str]'):
+# Permet de jouer une partie ia contre ia
+def ai_ai(param1 : 'list[str]', param2 : 'list[str]') -> 'tuple':
     board = ob.init_othello()
     turn = 1
     list_method = [("absolute", mm.fonct_eval_absolu), ("positional", mm.fonct_eval_positional), ("mobility", mm.fonct_eval_mobility), ("mixed", mm.fonct_eval_mixed)]
@@ -223,7 +246,9 @@ def ai_ai(param1 : 'list[str]', param2 : 'list[str]'):
 
     while gp.end(board, turn) == False:
         
+        # Joueur 1 -> mêmes particularités que la partie ia dans human_ia()
         if turn == 1:
+            print("\nJoueur 1 :\n")
             next_board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(next_board, 1)
 
@@ -244,7 +269,9 @@ def ai_ai(param1 : 'list[str]', param2 : 'list[str]'):
                 ob.display_othello(board, 0)
             turn = 2
         
+        # Joueur 2
         else :
+            print("\nJoueur 2 :\n")
             next_board = gp.next_pos(board, turn)
             liste_pos = ob.display_othello(next_board, 1)
 
@@ -267,6 +294,7 @@ def ai_ai(param1 : 'list[str]', param2 : 'list[str]'):
 
     return (board, turn)
 
+# Retourne une fonction d'évaluation
 def which_method(list_method : 'list[tuple]', method : 'str'):
 
     for k in list_method:
@@ -274,5 +302,5 @@ def which_method(list_method : 'list[tuple]', method : 'str'):
         if method == k[0]:
             return k[1]
 
-menu()
 #play(["ia", "absolute", "alpha-beta"],["ia", "positional", "alpha-beta"])
+menu()
