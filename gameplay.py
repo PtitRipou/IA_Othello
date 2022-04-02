@@ -16,7 +16,7 @@ def next_pos(board : 'list[list[int]]', player : 'int') -> 'list[list[int]]':
             if board[k][p] == player:
                 list_play = list_possible_play(board, k, p, player)
                 
-                # Si un plusieurs coups sont jouables, remplacer la / les cases corresponndantes sur le plateau par la valeur 3
+                # Si un ou plusieurs coups sont jouables, remplacer la / les cases corresponndantes sur le plateau par la valeur 3
                 if list_play != []:
 
                     for i in range(len(list_play)):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Implémentation de l'interface de jeu
-
+import time
 from math import inf
 import gameplay as gp
 import othello_board as ob
@@ -82,27 +82,21 @@ def play(p1 : 'list[list]', p2 : 'list[list]'):
     # Partie humain contre humain
     if (p1[0] == "human") and (p2[0] == "human"):
         result = human_human()
-        board = result[0]
-        turn = result[1]
 
     # Partie humain contre ia | AMÉLIORATIONS -> ici joueur 1 forcément humain
     elif (p1[0] == "human") and (p2[0] == "ia"):
         result = human_ai(p2[1:3])
-        board = result[0]
-        turn = result[1]
     
     # Partie ia contre ia
     elif (p1[0] == "ia") and (p2[0] == "ia"):
         result = ai_ai(p1[1:3], p2[1:3])
-        board = result[0]
-        turn = result[1]
 
     else:
         print("Error ! Can't find the correct configuration !")
         return
 
-    ob.display_othello(board, 0)
-    var = gp.end(board, turn)
+    ob.display_othello(result, 0)
+    var = gp.winner(result)
 
     # Affichage du gagnant
     if (var == 1) or (var == 2):
@@ -171,7 +165,7 @@ def human_human() -> 'tuple':
             
             turn = 1
     
-    return (board, turn)
+    return board
 
 # Permet de jouer une partie humain contre ia
 def human_ai(param : 'list[str]') ->  'tuple':
@@ -233,7 +227,7 @@ def human_ai(param : 'list[str]') ->  'tuple':
                 board = gp.next_play(board, liste_pos, result[1], turn)
             turn = 1
     
-    return (board, turn)
+    return board
 
 # Permet de jouer une partie ia contre ia
 def ai_ai(param1 : 'list[str]', param2 : 'list[str]') -> 'tuple':
@@ -292,7 +286,7 @@ def ai_ai(param1 : 'list[str]', param2 : 'list[str]') -> 'tuple':
                 ob.display_othello(board, 0)
             turn = 1
 
-    return (board, turn)
+    return board
 
 # Retourne une fonction d'évaluation
 def which_method(list_method : 'list[tuple]', method : 'str'):
@@ -302,5 +296,5 @@ def which_method(list_method : 'list[tuple]', method : 'str'):
         if method == k[0]:
             return k[1]
 
-#play(["ia", "absolute", "alpha-beta"],["ia", "positional", "alpha-beta"])
 menu()
+#play(["ia", "mixed", "alpha-beta"],["ia", "absolute", "alpha-beta"])
