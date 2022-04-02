@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Implémentation de l'interface de jeu
-import time
+
 from math import inf
 import gameplay as gp
 import othello_board as ob
@@ -238,6 +238,9 @@ def ai_ai(param1 : 'list[str]', param2 : 'list[str]') -> 'tuple':
     funct_eval1 = which_method(list_method, param1[0])
     funct_eval2 = which_method(list_method, param2[0])
 
+    list_time1=[]
+    list_time2=[]
+
     while gp.end(board, turn) == False:
         
         # Joueur 1 -> mêmes particularités que la partie ia dans human_ia()
@@ -296,5 +299,11 @@ def which_method(list_method : 'list[tuple]', method : 'str'):
         if method == k[0]:
             return k[1]
 
+def moyenne(liste):
+    var=0
+    for k in liste:
+        var+=k
+    return var/len(liste)
+
 menu()
-#play(["ia", "mixed", "alpha-beta"],["ia", "absolute", "alpha-beta"])
+#play(["human"],["ia", "absolute", "alpha-beta"])
